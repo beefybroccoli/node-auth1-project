@@ -25,6 +25,4 @@ const sessionConfig = {
     })
 };
 
-
-
 module.exports = {sessionConfig, sessionName, secretKey};
