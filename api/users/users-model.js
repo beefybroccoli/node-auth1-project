@@ -12,7 +12,6 @@ async function find() {
  */
 async function findBy(filter) {
   const array = await db('users').where(filter);
-  console.log("array = ", array);
   return array[0];
 }
 
@@ -30,7 +29,7 @@ async function findById(user_id) {
 async function add(user) {
   const newUserId = await db('users').insert(user);
   const newUser = await db('users').where("user_id", newUserId[0]).select("user_id", "username");
-  return newUser;
+  return newUser[0];
 }
 
 module.exports = {find, findBy, findById, add};
