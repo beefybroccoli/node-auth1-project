@@ -30,7 +30,7 @@ async function checkUsernameFree(req, res, next) {
   }else{
     const user = await findBy({username});
     if(isUndefined(user)){
-      req.user = {username, ...req.user};
+      req.user = {username:username, ...req.user};
       next();
     }else{
       res.status(422).json({message:"Username taken"});
@@ -85,7 +85,10 @@ function checkPasswordLength(req, res, next) {
 function comparePassword(req, res, next){
   // cosnt {password}
   // if(bcrypt.compareSync(req.user.password, ))
-  if(true){
+  console.log("req.existingUser.password = ", req.existingUser.password);
+  console.log("req.body.password = ", req.body.password );
+  console.log("bcryptHashPassword(req.body.password ) = ", bcryptHashPassword(req.body.password ));
+  if(bcryptComparepassword(req.body.password, req.existingUser.password) === false){
     res.status(401).json({message:"Invalid credentials 2"});
   }else{
     next();
@@ -94,6 +97,10 @@ function comparePassword(req, res, next){
 
 function bcryptHashPassword (password){
   return bcrypt.hashSync(password, 10);
+}
+
+function bcryptComparepassword(userInputPassword, hashedPassword){
+  return bcrypt.compareSync(userInputPassword, hashedPassword);
 }
 
 module.exports = {checkPasswordLength, checkUsernameFree, checkUsernameExists, comparePassword}

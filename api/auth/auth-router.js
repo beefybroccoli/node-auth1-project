@@ -55,8 +55,7 @@ router.post("/register", checkUsernameFree, checkPasswordLength, async (req, res
  */
 router.post("/login", checkUsernameExists, checkPasswordLength, comparePassword, async (req, res, next) =>{
   try{
-    res.status(200).json({message:`Welcome sam`});
-    //${req.user.username}
+    res.status(200).json({message:`Welcome ${req.existingUser.username}`});
   }catch(err){
     next(err);
   }
