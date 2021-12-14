@@ -30,8 +30,7 @@ const {} = require("../users/users-middleware");
  */
 router.post("/register", checkUsernameFree, checkPasswordLength, async (req, res, next) =>{
   try{
-    const {username, password} = req.body;
-    const newUser = await add({username, password});
+    const newUser = await add(req.newUser);
     res.status(201).json(newUser);
   }catch(err){
     next(err);

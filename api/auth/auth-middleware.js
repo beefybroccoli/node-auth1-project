@@ -1,6 +1,7 @@
 const {findBy } = require("../users/users-model");
 const {isUndefined} = require("../users/users-middleware");
-const req = require("express/lib/request");
+const bcrypt = require('bcryptjs');
+
 
 /*
   If the user does not have a session saved in the server
@@ -29,6 +30,7 @@ async function checkUsernameFree(req, res, next) {
   }else{
     const user = await findBy({username});
     if(isUndefined(user)){
+      req.newUser = {username};
       next();
     }else{
       res.status(422).json({message:"Username taken"});
@@ -50,7 +52,6 @@ async function checkUsernameExists(req, res, next) {
   if(isUndefined(user)){
     res.status(401).json({message:"Invalid credentials"});
   }else{
-    req.user = user;
     next();
   }
 
@@ -69,6 +70,7 @@ function checkPasswordLength(req, res, next) {
   if (isUndefined(password) || typeof password !== 'string' || password.length < 3){
     res.status(422).json({message:"Password must be longer than 3 chars"});
   }else{
+    req.newUser = {password:bcrypt.hashSync(password, 10), ...req.newUser};
     next();
   }
 }
