@@ -54,7 +54,7 @@ async function checkUsernameExists(req, res, next) {
     const user = await findBy({username});
     console.log("user = ", user);
     if(isUndefined(user)){
-      res.status(401).json({message:"Invalid credentials 1"});
+      res.status(401).json({message:"Invalid credentials"});
     }else{
       req.existingUser = {...user};
       next();
@@ -89,7 +89,7 @@ function comparePassword(req, res, next){
   console.log("req.body.password = ", req.body.password );
   console.log("bcryptHashPassword(req.body.password ) = ", bcryptHashPassword(req.body.password ));
   if(bcryptComparepassword(req.body.password, req.existingUser.password) === false){
-    res.status(401).json({message:"Invalid credentials 2"});
+    res.status(401).json({message:"Invalid credentials"});
   }else{
     next();
   }
