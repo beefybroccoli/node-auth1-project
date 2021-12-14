@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router();
 const {find, findBy, findById, add} = require("./users-model");
-const {verifyUserId, verifyUndefined} = require("./users-middleware");
+const {verifyUserId, verifyUndefined: isUndefined} = require("./users-middleware");
 
 /**
   [GET] /api/users
@@ -40,7 +40,7 @@ const {verifyUserId, verifyUndefined} = require("./users-middleware");
     try{
       const {id} = req.params;
       const user = await findById(id);
-      if (verifyUndefined(user)){
+      if (isUndefined(user)){
         res.status(404).json({message:`id ${id} not found`});
       }else{
         res.status(200).json(user);
