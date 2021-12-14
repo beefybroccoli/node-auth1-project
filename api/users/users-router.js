@@ -30,7 +30,10 @@ const {verifyUserId, verifyUndefined: isUndefined} = require("./users-middleware
   router.get("", async (req, res, next)=>{
     try{
       const array = await find();
-      res.status(200).json(array);
+      res.status(200).json(array.map(
+        element=> {
+          return {user_id:element.user_id, username:element.username};
+        }));
     }catch(err){
       next(err);
     }
@@ -45,5 +48,3 @@ const {verifyUserId, verifyUndefined: isUndefined} = require("./users-middleware
   })
 
   module.exports = router;
-
-// Don't forget to add the router to the `exports` object so it can be required in other modules
