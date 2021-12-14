@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router();
 const {find, findBy, findById, add} = require("./users-model");
-const {verifyUserId, verifyUndefined: isUndefined} = require("./users-middleware");
+const {verifyUserId, isUndefined} = require("./users-middleware");
 
 /**
   [GET] /api/users
@@ -30,10 +30,7 @@ const {verifyUserId, verifyUndefined: isUndefined} = require("./users-middleware
   router.get("", async (req, res, next)=>{
     try{
       const array = await find();
-      res.status(200).json(array.map(
-        element=> {
-          return {user_id:element.user_id, username:element.username};
-        }));
+      res.status(200).json(array);
     }catch(err){
       next(err);
     }

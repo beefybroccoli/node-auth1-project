@@ -24,13 +24,16 @@ function restricted() {
 */
 async function checkUsernameFree(req, res, next) {
   const {username} = req.body;
-  const user = await findBy(username);
-  if(isUndefined(user)){
-    next();
+  if (isUndefined(username)){
+    res.status(401).json({message:"Invalid username"});
   }else{
-    res.status(422).json({message:"Username taken"});
+    const user = await findBy({username});
+    if(isUndefined(user)){
+      next();
+    }else{
+      res.status(422).json({message:"Username taken"});
+    }
   }
-
 }
 
 /*

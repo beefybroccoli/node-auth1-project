@@ -22,4 +22,5 @@ function isUndefined(input){
     return typeof input === 'undefined';
 }
 
+
 module.exports = {verifyUserId, isUndefined};

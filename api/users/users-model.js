@@ -4,7 +4,7 @@ const db = require("../../data/db-config");
   resolves to an ARRAY with all users, each user having { user_id, username }
  */
 async function find() {
-  return await db('users');
+  return await db('users').select("user_id", "username");
 }
 
 /**
@@ -29,7 +29,7 @@ async function findById(user_id) {
  */
 async function add(user) {
   const newUserId = await db('users').insert(user);
-  const newUser = await db('users').where("users_id", newUserId[0]);
+  const newUser = await db('users').where("user_id", newUserId[0]).select("user_id", "username");
   return newUser;
 }
 
