@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router();
 const {find, findBy, findById, add} = require("./users-model");
+const {verifyUserId, verifyUndefined} = require("./users-middleware");
 
 /**
   [GET] /api/users
@@ -26,10 +27,24 @@ const {find, findBy, findById, add} = require("./users-model");
   }
  */
 
-  router.get("/api/users", async (req, res, next)=>{
+  router.get("", async (req, res, next)=>{
     try{
       const array = await find();
       res.status(200).json(array);
+    }catch(err){
+      next(err);
+    }
+  })
+
+  router.get("/:id", verifyUserId, async (req, res, next)=>{
+    try{
+      const {id} = req.params;
+      const user = await findById(id);
+      if (verifyUndefined(user)){
+        res.status(404).json({message:`id ${id} not found`});
+      }else{
+        res.status(200).json(user);
+      }
     }catch(err){
       next(err);
     }

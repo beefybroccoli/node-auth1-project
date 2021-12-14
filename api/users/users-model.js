@@ -19,6 +19,7 @@ async function findBy(filter) {
  */
 async function findById(user_id) {
   const result = await db('users').where('user_id', user_id);
+  console.log("reslt = ", result);
   return result[0];
 }
 
