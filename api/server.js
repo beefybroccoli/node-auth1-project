@@ -2,6 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const routerUsers = require("./users/users-router");
+const routerAuth = require("./auth/auth-router");
 
 /**
   Do what needs to be done to support sessions with the `express-session` package!
@@ -27,6 +28,7 @@ server.get("/", (req, res) => {
 });
 
 server.use("/api/users", routerUsers);
+server.use("/api/auth", routerAuth);
 
 server.use((err, req, res, next) => { // eslint-disable-line
   res.status(err.status || 500).json({

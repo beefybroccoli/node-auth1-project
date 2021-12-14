@@ -1,3 +1,7 @@
+const {findBy } = require("../users/users-model");
+const {isUndefined} = require("../users/users-middleware");
+const req = require("express/lib/request");
+
 /*
   If the user does not have a session saved in the server
 
@@ -18,7 +22,14 @@ function restricted() {
     "message": "Username taken"
   }
 */
-function checkUsernameFree() {
+async function checkUsernameFree(req, res, next) {
+  const {username} = req.body;
+  const user = await findBy(username);
+  if(isUndefined(user)){
+    next();
+  }else{
+    res.status(422).json({message:"Username taken"});
+  }
 
 }
 
@@ -30,7 +41,15 @@ function checkUsernameFree() {
     "message": "Invalid credentials"
   }
 */
-function checkUsernameExists() {
+async function checkUsernameExists(req, res, next) {
+  const {username} = req.body;
+  const user = await findBy(username);
+  if(isUndefined(user)){
+    res.status(401).json({message:"Invalid credentials"});
+  }else{
+    req.user = user;
+    next();
+  }
 
 }
 
@@ -42,8 +61,13 @@ function checkUsernameExists() {
     "message": "Password must be longer than 3 chars"
   }
 */
-function checkPasswordLength() {
-
+function checkPasswordLength(req, res, next) {
+  const {password} = req.body;
+  if (isUndefined(password) || typeof password !== 'string' || password.length < 3){
+    res.status(422).json({message:"Password must be longer than 3 chars"});
+  }else{
+    next();
+  }
 }
 
-// Don't forget to add these to the `exports` object so they can be required in other modules
+module.exports = {checkPasswordLength, checkUsernameFree, checkUsernameExists}
