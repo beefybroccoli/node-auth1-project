@@ -1,7 +1,7 @@
 const session = require('express-session');
 const Store = require("connect-session-knex")(session);
 
-const sessionName = "monkey";
+const sessionName = "chocolatechip";
 
 const secretKey = "secret key";
 

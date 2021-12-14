@@ -82,7 +82,7 @@ router.post("/login", checkUsernameExists, checkPasswordLength, comparePassword,
     "message": "no session"
   }
  */
-  router.post("/logout", async (req, res, next) =>{
+  router.get("/logout", async (req, res, next) =>{
     try{
       if(req.session.user){
         req.session.destroy(

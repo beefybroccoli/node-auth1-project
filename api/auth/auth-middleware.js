@@ -11,7 +11,12 @@ const bcrypt = require('bcryptjs');
     "message": "You shall not pass!"
   }
 */
-function restricted() {
+function restricted(req, res, next) {
+  if(!req.session.user){
+    res.status(401).json({message:"You shall not pass!"});
+  }else{
+    next();
+  }
 
 }
 
@@ -97,4 +102,4 @@ function bcryptComparepassword(userInputPassword, hashedPassword){
   return bcrypt.compareSync(userInputPassword, hashedPassword);
 }
 
-module.exports = {checkPasswordLength, checkUsernameFree, checkUsernameExists, comparePassword}
+module.exports = {checkPasswordLength, checkUsernameFree, checkUsernameExists, comparePassword, restricted}

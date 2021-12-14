@@ -5,6 +5,7 @@ const routerUsers = require("./users/users-router");
 const routerAuth = require("./auth/auth-router");
 const session = require('express-session');
 const {sessionConfig} = require("./session-config");
+const {restricted} = require("./auth/auth-middleware");
 
 /**
   Do what needs to be done to support sessions with the `express-session` package!
@@ -32,10 +33,10 @@ server.get("/", (req, res) => {
 
 server.use(session(sessionConfig));
 
-server.use("/api/users", routerUsers);
+server.use("/api/users", restricted, routerUsers);
 server.use("/api/auth", routerAuth);
 
-server.use('*', (req, res, next)=>{
+server.use((req, res, next)=>{
   next({status:404, message: `path ${req.path} not found`});
 })
 
