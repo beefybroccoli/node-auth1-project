@@ -4,7 +4,7 @@ const {checkPasswordLength,checkUsernameExists,checkUsernameFree, comparePasswor
 const express = require("express");
 const router = express.Router();
 const {add} = require("../users/users-model");
-const {} = require("../users/users-middleware");
+const {sessionName} = require("../session-config");
 
 /**
   1 [POST] /api/auth/register { "username": "sue", "password": "1234" }
@@ -55,6 +55,7 @@ router.post("/register", checkUsernameFree, checkPasswordLength, async (req, res
  */
 router.post("/login", checkUsernameExists, checkPasswordLength, comparePassword, async (req, res, next) =>{
   try{
+    req.sessionName = sessionName;
     res.status(200).json({message:`Welcome ${req.existingUser.username}`});
   }catch(err){
     next(err);
