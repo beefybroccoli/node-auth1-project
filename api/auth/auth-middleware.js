@@ -52,7 +52,6 @@ async function checkUsernameExists(req, res, next) {
     res.status(401).json({message:"require username"}); 
   }else{
     const user = await findBy({username});
-    console.log("user = ", user);
     if(isUndefined(user)){
       res.status(401).json({message:"Invalid credentials"});
     }else{
@@ -83,11 +82,6 @@ function checkPasswordLength(req, res, next) {
 }
 
 function comparePassword(req, res, next){
-  // cosnt {password}
-  // if(bcrypt.compareSync(req.user.password, ))
-  console.log("req.existingUser.password = ", req.existingUser.password);
-  console.log("req.body.password = ", req.body.password );
-  console.log("bcryptHashPassword(req.body.password ) = ", bcryptHashPassword(req.body.password ));
   if(bcryptComparepassword(req.body.password, req.existingUser.password) === false){
     res.status(401).json({message:"Invalid credentials"});
   }else{

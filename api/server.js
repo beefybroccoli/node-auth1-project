@@ -4,7 +4,7 @@ const cors = require("cors");
 const routerUsers = require("./users/users-router");
 const routerAuth = require("./auth/auth-router");
 const session = require('express-session');
-const sessionConfig = require("./session-config");
+const {sessionConfig} = require("./session-config");
 
 /**
   Do what needs to be done to support sessions with the `express-session` package!
@@ -34,6 +34,10 @@ server.use(session(sessionConfig));
 
 server.use("/api/users", routerUsers);
 server.use("/api/auth", routerAuth);
+
+server.use('*', (req, res, next)=>{
+  next({status:404, message: `path ${req.path} not found`});
+})
 
 server.use((err, req, res, next) => { // eslint-disable-line
   res.status(err.status || 500).json({
