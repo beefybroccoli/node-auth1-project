@@ -30,7 +30,7 @@ async function checkUsernameFree(req, res, next) {
   }else{
     const user = await findBy({username});
     if(isUndefined(user)){
-      req.newUser = {username, ...req.newUser};
+      req.user = {username, ...req.user};
       next();
     }else{
       res.status(422).json({message:"Username taken"});
@@ -48,12 +48,19 @@ async function checkUsernameFree(req, res, next) {
 */
 async function checkUsernameExists(req, res, next) {
   const {username} = req.body;
-  const user = await findBy(username);
-  if(isUndefined(user)){
-    res.status(401).json({message:"Invalid credentials"});
+  if (isUndefined(username)){
+    res.status(401).json({message:"require username"}); 
   }else{
-    next();
+    const user = await findBy({username});
+    console.log("user = ", user);
+    if(isUndefined(user)){
+      res.status(401).json({message:"Invalid credentials 1"});
+    }else{
+      req.existingUser = {...user};
+      next();
+    }
   }
+  
 
 }
 
@@ -70,9 +77,23 @@ function checkPasswordLength(req, res, next) {
   if (isUndefined(password) || typeof password !== 'string' || password.length < 3){
     res.status(422).json({message:"Password must be longer than 3 chars"});
   }else{
-    req.newUser = {password:bcrypt.hashSync(password, 10), ...req.newUser};
+    req.user = {password:bcryptHashPassword(password), ...req.user};
     next();
   }
 }
 
-module.exports = {checkPasswordLength, checkUsernameFree, checkUsernameExists}
+function comparePassword(req, res, next){
+  // cosnt {password}
+  // if(bcrypt.compareSync(req.user.password, ))
+  if(true){
+    res.status(401).json({message:"Invalid credentials 2"});
+  }else{
+    next();
+  }
+}
+
+function bcryptHashPassword (password){
+  return bcrypt.hashSync(password, 10);
+}
+
+module.exports = {checkPasswordLength, checkUsernameFree, checkUsernameExists, comparePassword}
