@@ -30,7 +30,7 @@ async function checkUsernameFree(req, res, next) {
   }else{
     const user = await findBy({username});
     if(isUndefined(user)){
-      req.newUser = {username};
+      req.newUser = {username, ...req.newUser};
       next();
     }else{
       res.status(422).json({message:"Username taken"});
