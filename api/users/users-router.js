@@ -38,13 +38,7 @@ const {verifyUserId, verifyUndefined: isUndefined} = require("./users-middleware
 
   router.get("/:id", verifyUserId, async (req, res, next)=>{
     try{
-      const {id} = req.params;
-      const user = await findById(id);
-      if (isUndefined(user)){
-        res.status(404).json({message:`id ${id} not found`});
-      }else{
-        res.status(200).json(user);
-      }
+      res.status(200).json(req.user);
     }catch(err){
       next(err);
     }
